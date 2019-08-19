@@ -48,7 +48,7 @@ namespace NextStopAnnouncementGenerator.App
 			$"{sanatizedName.Replace(" ", "_").ToLower()}.wav";
 
 
-		public void CreateWavFile(string outFolder, string value, string prefix = null, Action<string> loggingCallback = null)
+		private void CreateWavFile(string outFolder, string value, string prefix = null, Action<string> loggingCallback = null)
 		{
 			var sanatized = SanatizeName(value);
 			var fileName = BuildFileName(sanatized);
@@ -59,6 +59,17 @@ namespace NextStopAnnouncementGenerator.App
 				loggingCallback?.Invoke(speakValue);
 			}
 		}
+
+		public void Run(string basePath)
+		{
+			var path = Path.Combine(basePath, "next_stop.txt");
+			var lines = File.ReadAllLines(path);
+			foreach (var line in lines)
+			{
+				CreateWavFile(basePath, line, "Now approaching,", Console.WriteLine);
+			}
+		}
+
 		public void ChangeVoice(int newVoiceIndex) => _currentVoiceIndex = newVoiceIndex;
 		public void ListVoices()
 		{

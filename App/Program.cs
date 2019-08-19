@@ -3,30 +3,47 @@ using System.IO;
 using static System.Environment;
 using System;
 using System.Linq;
+using Console = Colorful.Console;
+using System.Drawing;
 
 namespace NextStopAnnouncementGenerator.App
 {
 	internal class Program
 	{
-		private static readonly string NextStopPath = Path.Combine(GetFolderPath(SpecialFolder.Desktop), "next_stop_announcements");
 		private static readonly Synth Synth = new Synth();
 
 		internal static void Main()
 		{
+			Console.WriteAscii("Next Stop Speaker");
 			while (true)
-			{
-				Console.WriteLine("\n\nCOMMANDS:");
-				Console.WriteLine("\trun - Process all lines in Desktop\\next_stop_announcements\\next_stops.txt");
-				Console.WriteLine("\tlist voice - List all installed voices");
-				Console.WriteLine("\tshow voice - Show info about the current voice");
-				Console.WriteLine("\tshow voice NUMBER - Show info about voice NUMBER");
-				Console.WriteLine("\tset voice NUMBER - Set the voice to voice NUMBER");
-				Console.WriteLine("\texit - Close the application.");
-				Console.Write("command: ");
-				var command = Console.ReadLine();
+			{		
+				var command = GetCommand();
 				Console.WriteLine();
 				ParseInput(command);
 			}
+		}
+
+private static string GetCommand()
+		{
+			Console.WriteLine("\n\nCOMMANDS:", Color.White);
+			ListCommand("run", "Process all lines in Desktop\\next_stop_announcements\\next_stops.txt");
+			ListCommand("list voice", "List all installed voices");
+			ListCommand("show voice", "Show info about the current voice");
+			ListCommand("show voice", "Show info about the indicated voice", "NUMBER");
+			ListCommand("set voice", "Set the voice based on the number in show voice", "NUMBER");
+			ListCommand("exit", "Close the application");
+			Console.Write(">  ", Color.White);
+			return Console.ReadLine();
+		}
+
+		private static void ListCommand(string name, string description, string arg = null)
+		{
+			Console.Write($"\t{name}");
+			if (!string.IsNullOrEmpty(arg))
+			{
+				Console.Write($" {arg}", Color.Green);
+			}
+			Console.WriteLine($" - {description}", Color.NavajoWhite);
 		}
 
 		private static void ParseInput(string input)
@@ -39,8 +56,8 @@ namespace NextStopAnnouncementGenerator.App
 			}
 			else if ("run".Equals(input, compare))
 			{
-				RunSynth();
-				return;
+				Synth.Run(Path.Combine(GetFolderPath(SpecialFolder.Desktop), "next_stop_announcements"));
+				Exit(0);
 			}
 			else if ("list voice".Equals(input, compare))
 			{
@@ -51,14 +68,14 @@ namespace NextStopAnnouncementGenerator.App
 			{
 				if ("show voice".Equals(input, compare))
 				{
-					Console.WriteLine(Synth.CurrentVoice.ToString());
+					Synth.CurrentVoice.Print();
 					return;
 				}
 				else
 				{
 					if (int.TryParse(input.Split().Last(), out var num))
 					{
-						Console.WriteLine(Synth.Voices[num - 1].ToString());
+						Synth.Voices[num - 1].Print();
 						return;
 					}
 				}
@@ -71,18 +88,7 @@ namespace NextStopAnnouncementGenerator.App
 					return;
 				}
 			}
-			Console.WriteLine("bad input, try again.");
-		}
-
-		private static void RunSynth()
-		{
-			var path = Path.Combine(NextStopPath, "next_stop.txt");
-			var lines = File.ReadAllLines(path);
-			foreach (var line in lines)
-			{
-				Synth.CreateWavFile(NextStopPath, line, "Now approaching,", Console.WriteLine);
-			}
-			Exit(0);
+			Console.WriteLine("bad input, try again.", Color.Yellow);
 		}
 
 	}

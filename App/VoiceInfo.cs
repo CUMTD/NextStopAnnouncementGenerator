@@ -1,7 +1,9 @@
 using System;
+using System.Drawing;
 using System.Linq;
 using System.Speech.Synthesis;
 using System.Text;
+using Console = Colorful.Console;
 
 namespace NextStopAnnouncementGenerator.App
 {
@@ -14,9 +16,8 @@ namespace NextStopAnnouncementGenerator.App
 			Voice = voice ?? throw new ArgumentException(nameof(voice));
 		}
 
-		public override string ToString()
+		public void Print()
 		{
-			var output = new StringBuilder();
 			var info = Voice.VoiceInfo;
 			var audioFormats = info
 				.SupportedAudioFormats
@@ -26,33 +27,20 @@ namespace NextStopAnnouncementGenerator.App
 					sb => sb.ToString()
 				);
 
-			output.AppendLine($" Name:          {info.Name}");
-			output.AppendLine($" Culture:       {info.Culture}");
-			output.AppendLine($" Age:           {info.Age}");
-			output.AppendLine($" Gender:        {info.Gender}");
-			output.AppendLine($" Description:   {info.Description}");
-			output.AppendLine($" ID:            {info.Id}" + info.Id);
-			output.AppendLine($" Enabled:       {Voice.Enabled}");
-
-			if (info.SupportedAudioFormats.Count != 0)
-			{
-				output.AppendLine($" Audio formats: {audioFormats}");
-			}
-			else
-			{
-				output.AppendLine(" No supported audio formats found");
-			}
-
-			var additionalInfo  = info.AdditionalInfo.Aggregate(
-				new StringBuilder(),
-				(sb, ai) => sb.AppendFormat("  {0}: {1}\n", ai.Key, ai.Value),
-				sb => sb.ToString()
-			);
-
-			output.AppendLine($" Additional Info - {additionalInfo}");
-			output.AppendLine();
-
-			return output.ToString();
+			Console.Write("Name:          ", Color.White);
+			Console.WriteLine(info.Name, Color.Gray);
+			Console.Write("Culture:       ", Color.White);
+			Console.WriteLine(info.Culture, Color.Gray);
+			Console.Write("Age:           ", Color.White);
+			Console.WriteLine(info.Age, Color.Gray);
+			Console.Write("Gender:        ", Color.White);
+			Console.WriteLine(info.Gender, Color.Gray);
+			Console.Write("Description:   ", Color.White);
+			Console.WriteLine(info.Description, Color.Gray);
+			Console.Write("ID:            ", Color.White);
+			Console.WriteLine(info.Id, Color.Gray);
+			Console.Write("Enabled:       ", Color.White);
+			Console.WriteLine(Voice.Enabled, Color.Gray);
 		}
 	}
 }

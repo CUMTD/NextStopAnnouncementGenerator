@@ -390,3 +390,6 @@ healthchecksdb
 MigrationBackup/
 
 # End of https://www.gitignore.io/api/windows,dotnetcore,visualstudio
+
+#CUSTOM
+secrets.json
