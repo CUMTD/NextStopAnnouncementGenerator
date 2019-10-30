@@ -33,7 +33,6 @@ steps:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    msbuildArgs: '/p:RunOctoPack=true /p:OctoPackEnforceAddingFiles=true /p:OctoPackPackageVersion=$(major).$(minor).$(patch)'
 
 - task: VSTest@2
   displayName: 'Test'
@@ -46,33 +45,3 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-
-- task: CopyFiles@2
-  displayName: 'Copy Build Output'
-  inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)'
-    Contents: '**\*.exe'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-- task: CopyFiles@2
-  displayName: 'Copy Config Files'
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: '**\Config\*.json'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Build Artifacts'
-  inputs:
-    pathtoPublish: $(Build.ArtifactStagingDirectory)
-
-- task: GitHubRelease@0
-  displayName: 'Create Github Release'
-  inputs:
-    gitHubConnection: 'Github'
-    title: 'Next Stop Announcement Generator'
-    addChangeLog: true
-    compareWith: 'lastRelease'
-    tagSource: 'manual'
-    tag: '$(Build.BuildNumber)'
-    assetUploadMode: 'replace'
