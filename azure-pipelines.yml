@@ -70,5 +70,4 @@ steps:
     compareWith: 'lastRelease'
     tagSource: 'manual'
     tag: '$(Build.BuildNumber)'
-    assets: '$(Build.ArtifactStagingDirectory)/*'
     assetUploadMode: 'replace'
