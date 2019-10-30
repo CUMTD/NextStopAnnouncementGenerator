@@ -1,6 +1,6 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
-name: Next StopAnnouncement Generator
+name: $(major).$(minor).$(patch)-$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
 trigger:
 - master
 
@@ -55,7 +55,7 @@ steps:
     addChangeLog: true
     compareWith: 'lastRelease'
     tagSource: 'manual'
-    tag: $(major).$(minor).$(patch)-$(Rev:.r)
+    tag: $(BuildDefinitionName)
     assets: |
       $(Build.ArtifactStagingDirectory)/*.exe
       $(Build.ArtifactStagingDirectory)/README.md
