@@ -1,0 +1,63 @@
+# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
+
+name: Next StopAnnouncement Generator
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-2019'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  major: '1'
+  minor: '0'
+  patch: $[counter('versioncounter', 0)]
+
+steps:
+- task: NuGetToolInstaller@0
+  displayName: 'Install Nuget Tooling'
+  inputs:
+    versionSpec: '>=5.x'
+    checkLatest: true
+
+- task: NuGetCommand@2
+  displayName: 'NuGet Package Restore'
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  displayName: 'Build'
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    msbuildArgs: '/p:RunOctoPack=true /p:OctoPackEnforceAddingFiles=true /p:OctoPackPackageVersion=$(major).$(minor).$(patch)'
+
+- task: VSTest@2
+  displayName: 'Test'
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+     **\*test*.dll
+     !**\*TestAdapter.dll
+     !**\obj\**
+    codeCoverageEnabled: true
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+
+- task: CopyFiles@2
+  displayName: 'Copy Build Output'
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    Contents: '**\octopacked\**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: NuGetCommand@2
+  displayName: 'Push to Octopus'
+  inputs:
+    command: push
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg;!$(Build.ArtifactStagingDirectory)/**/tempNuGet*.nupkg'
+    nuGetFeedType: external
+    publishFeedCredentials: 'Octopus Nuget Feed'

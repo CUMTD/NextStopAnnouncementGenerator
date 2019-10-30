@@ -1,0 +1,5 @@
+{
+	"useDesktop": true,
+	"inputFileName": "NextStopAnnouncements\\next_stops.csv",
+	"outputDirectory": "NextStopAnnouncements\\Output\\"
+}

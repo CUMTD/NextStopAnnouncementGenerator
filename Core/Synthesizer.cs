@@ -18,26 +18,27 @@ namespace NextStopAnnouncementGenerator.Core
 	public abstract class Synthesizer<T>
 	{
 		/// <summary>
-		/// The base path for input and output.
+		/// The output directory for generated audio files.
 		/// </summary>
-		protected string BasePath { get; }
+		protected string OutputDirectory { get; }
 
 		/// <summary>
-		/// The name of the CSV input file to read.
+		/// The path to the input csv file.
 		/// </summary>
-		protected string InputFileName { get; }
+		protected string InputFile { get; }
 
 		/// <summary>
 		/// Action to run for logging.
 		/// </summary>
 		protected Action<string> LogAction { get; }
+
 		// Delay between synthesis. Useful if synthesis tool is rate limited.
 		private int Delay { get; }
 
 		/// <summary>
 		/// CsvHelper configuration. Contains sensible defaults but is overridable.
 		/// </summary>
-		protected virtual Configuration Configuration => new Configuration(CultureInfo.CurrentCulture)
+		protected virtual Configuration CsvReaderConfiguration => new Configuration(CultureInfo.CurrentCulture)
 		{
 			BadDataFound = rc => LogAction($"BAD DATA: {rc.RawRecord}"),
 			HasHeaderRecord = false,
@@ -55,16 +56,16 @@ namespace NextStopAnnouncementGenerator.Core
 		/// <summary>
 		/// Create a new Synthesizer
 		/// </summary>
-		/// <param name="basePath">The base path for input and output.</param>
-		/// <param name="inputFileName">The name of the CSV input file to read.</param>
+		/// <param name="inputFile">The path to the input csv file.</param>
+		/// <param name="outDirectory">The output directory for generated audio files.</param>
 		/// <param name="logAction">Action to run for logging.</param>
 		/// <param name="delay">Delay between synthesis. Useful if synthesis tool is rate limited.</param>
-		protected Synthesizer(string basePath, string inputFileName, Action<string> logAction = null, int delay = 0)
+		protected Synthesizer(string inputFile, string outDirectory, Action<string> logAction = null, int delay = 0)
 		{
-			BasePath = basePath ?? throw new ArgumentException(nameof(basePath));
-			InputFileName = inputFileName ?? throw new ArgumentException(nameof(inputFileName));
-			Delay = delay;
+			InputFile = inputFile ?? throw new ArgumentException(nameof(inputFile));
+			OutputDirectory = outDirectory ?? throw new ArgumentException(nameof(outDirectory));
 			LogAction = logAction ?? (_str => { });
+			Delay = delay;
 		}
 
 		/// <summary>
@@ -89,9 +90,9 @@ namespace NextStopAnnouncementGenerator.Core
 		/// <returns>An array of T containing all items in the CSV file.</returns>
 		protected virtual T[] ReadCsv()
 		{
-			var path = Path.Combine(BasePath, InputFileName);
+			var path = Path.Combine(OutputDirectory, InputFile);
 			using var reader = new StreamReader(path);
-			using var csv = new CsvReader(reader, Configuration);
+			using var csv = new CsvReader(reader, CsvReaderConfiguration);
 			return csv.GetRecords<T>().ToArray();
 		}
 

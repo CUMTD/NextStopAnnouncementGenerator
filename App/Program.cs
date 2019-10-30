@@ -3,6 +3,7 @@ using System.IO;
 using static System.Environment;
 using NextStopAnnouncementGenerator.Google;
 using System.Threading.Tasks;
+using NextStopAnnouncementGenerator.App.Config;
 
 namespace NextStopAnnouncementGenerator.App
 {
@@ -10,15 +11,28 @@ namespace NextStopAnnouncementGenerator.App
 	{
 		internal static async Task Main()
 		{
-			var googleTextToSpeechClient = new GoogleTextToSpeechSynthesizer(
-				Path.Combine(GetFolderPath(SpecialFolder.Desktop), "next_stop_announcements"),
-				"next_stop.csv",
-				Console.WriteLine
-			);
+			var (inputFile, outDirectory) = GetInputOutputPaths();
+
+			var googleTextToSpeechClient = new GoogleTextToSpeechSynthesizer(inputFile, outDirectory, Console.WriteLine);
 			await googleTextToSpeechClient.Run();
 
 			Console.WriteLine("\nDone!");
 			Console.ReadLine();
+		}
+
+		private static (string, string) GetInputOutputPaths()
+		{
+			var config = ConfigReader.ReadSettings<AppConfig>();
+
+			if (config.UseDesktop)
+			{
+				var basePath = Environment.GetFolderPath(SpecialFolder.Desktop);
+				return (Path.Combine(basePath, config.InputFileName), Path.Combine(basePath, config.OutputDirectory));
+			}
+			else
+			{
+				return (config.InputFileName, config.OutputDirectory);
+			}
 		}
 
 	}

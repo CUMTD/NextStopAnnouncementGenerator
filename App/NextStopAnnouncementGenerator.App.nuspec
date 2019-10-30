@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata>
+		<id>NextStopAnnouncementGenerator.App</id>
+		<title>Next Stop Announcement Generator</title>
+		<version>1.0.0</version>
+		<authors>Ryan Blackman</authors>
+		<owners>Champaign-Urbana Mass Transit District</owners>
+		<projectUrl>https://github.com/CUMTD/NextStopAnnouncementGenerator</projectUrl>
+		<description>Generate next stop announcements</description>
+	</metadata>
+	<files>
+		<file src="Config\**\*.*" target="Config" />
+	</files>
+</package>
