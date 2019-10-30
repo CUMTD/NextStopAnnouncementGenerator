@@ -50,7 +50,7 @@ steps:
 - task: GitHubRelease@0
   displayName: 'Create Github Release'
   inputs:
-    gitHubConnection: 'CUMTD'
+    gitHubConnection: 'Github'
     title: 'Next Stop Announcement Generator'
     addChangeLog: true
     compareWith: 'lastRelease'
