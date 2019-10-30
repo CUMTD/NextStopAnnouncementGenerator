@@ -52,9 +52,9 @@ steps:
   inputs:
     SourceFolder: '$(System.DefaultWorkingDirectory)'
     Contents: |
-      '**\*.exe'
-      '**\Config\*.json'
-      '**\*.md'
+     '**\*.exe'
+     '**\Config\*.json'
+     '**\*.md'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: CopyFiles@2
@@ -62,8 +62,8 @@ steps:
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
     Contents: |
-      '**\*.json'
-      'README.md'
+     '**\*.json'
+     'README.md'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: GitHubRelease@0
@@ -76,3 +76,4 @@ steps:
     tagSource: 'manual'
     tag: '$(Build.BuildNumber)'
     assets: '$(Build.ArtifactStagingDirectory)/*'
+    assetUploadMode: 'replace'
