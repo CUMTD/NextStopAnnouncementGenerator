@@ -51,19 +51,14 @@ steps:
   displayName: 'Copy Build Output'
   inputs:
     SourceFolder: '$(System.DefaultWorkingDirectory)'
-    Contents: |
-     '**\*.exe'
-     '**\Config\*.json'
-     '**\*.md'
+    Contents: '**\*.exe'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: CopyFiles@2
   displayName: 'Copy Config Files'
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: |
-     '**\*.json'
-     'README.md'
+    Contents: '**\Config\*.json'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: GitHubRelease@0
