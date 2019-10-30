@@ -61,6 +61,8 @@ steps:
     Contents: '**\Config\*.json'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
+- task: PublishBuildArtifacts@1
+
 - task: GitHubRelease@0
   displayName: 'Create Github Release'
   inputs:
