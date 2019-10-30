@@ -47,6 +47,13 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
 
+- task: CopyFiles@2
+  displayName: 'Copy Build Output'
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    Contents: '**\*.exe'
+    TargetFolder: '**\Config\*.json'
+
 - task: GitHubRelease@0
   displayName: 'Create Github Release'
   inputs:
@@ -55,7 +62,6 @@ steps:
     addChangeLog: true
     compareWith: 'lastRelease'
     tagSource: 'manual'
-    tag: $(BuildDefinitionName)
     assets: |
       $(Build.ArtifactStagingDirectory)/*.exe
       $(Build.ArtifactStagingDirectory)/README.md
