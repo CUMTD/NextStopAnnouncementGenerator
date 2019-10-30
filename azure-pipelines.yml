@@ -57,10 +57,10 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Config Files'
   inputs:
-    SourceFolder: '$(Build.Repository.LocalPath)'
+    SourceFolder: '$(Build.SourcesDirectory)'
     Contents: |
-      '**\Config\*.json'
-      '**\*.md'
+      '**/Config/**/*.json'
+      '**/*.md'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: GitHubRelease@0
@@ -72,7 +72,4 @@ steps:
     compareWith: 'lastRelease'
     tagSource: 'manual'
     tag: '$(Build.BuildNumber)'
-    assets: |
-      $(Build.ArtifactStagingDirectory)\*.exe
-      $(Build.ArtifactStagingDirectory)\README.md
-      $(Build.ArtifactStagingDirectory)\Config/*.json
+    assets: '**/*.*'
