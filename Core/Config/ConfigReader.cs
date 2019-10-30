@@ -2,12 +2,12 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace NextStopAnnouncementGenerator.App
+namespace NextStopAnnouncementGenerator.Core.Config
 {
 	/// <summary>
 	/// Reads JSON config files.
 	/// </summary>
-	internal static class ConfigReader
+	public static class ConfigReader
 	{
 		/// <summary>
 		/// Read settings for a type T.

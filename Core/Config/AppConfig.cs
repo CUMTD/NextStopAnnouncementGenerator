@@ -1,4 +1,4 @@
-namespace NextStopAnnouncementGenerator.App.Config
+namespace NextStopAnnouncementGenerator.Core.Config
 {
 	public class AppConfig
 	{

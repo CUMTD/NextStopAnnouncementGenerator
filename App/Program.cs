@@ -3,7 +3,7 @@ using System.IO;
 using static System.Environment;
 using NextStopAnnouncementGenerator.Google;
 using System.Threading.Tasks;
-using NextStopAnnouncementGenerator.App.Config;
+using NextStopAnnouncementGenerator.Core.Config;
 
 namespace NextStopAnnouncementGenerator.App
 {

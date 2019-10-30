@@ -7,6 +7,8 @@ using Google.Cloud.TextToSpeech.V1;
 using Grpc.Auth;
 using Grpc.Core;
 using NextStopAnnouncementGenerator.Core;
+using NextStopAnnouncementGenerator.Core.Config;
+using NextStopAnnouncementGenerator.Google.Config;
 
 namespace NextStopAnnouncementGenerator.Google
 {
@@ -14,12 +16,14 @@ namespace NextStopAnnouncementGenerator.Google
 	public class GoogleTextToSpeechSynthesizer : Synthesizer<SsmlStopName>
 	{
 		private TextToSpeechClient Client { get; }
+		private GoogleConfig GoogleConfig { get; }
 
 		public GoogleTextToSpeechSynthesizer(string inputFile, string outDirectory, string prepend, Action<string> logAction) : base(inputFile, outDirectory, prepend, logAction, 1000)
 		{
 			var cred = GoogleCredential.FromFile(Path.Combine(AppContext.BaseDirectory, "googleCreds.json")).ToChannelCredentials();
 			var channel = new Channel(TextToSpeechClient.DefaultEndpoint.Host, TextToSpeechClient.DefaultEndpoint.Port, cred);
 			Client = TextToSpeechClient.Create(channel);
+			GoogleConfig = ConfigReader.ReadSettings<GoogleConfig>();
 		}
 
 		private async Task Synth(string fileName, string ssml)
@@ -32,15 +36,15 @@ namespace NextStopAnnouncementGenerator.Google
 
 			var voice = new VoiceSelectionParams
 			{
-				LanguageCode = "en-US",
-				SsmlGender = SsmlVoiceGender.Male
+				LanguageCode = GoogleConfig.LanguageCode,
+				SsmlGender = GoogleConfig.SsmlVoiceGender
 			};
 
 			var config = new AudioConfig
 			{
-				AudioEncoding = AudioEncoding.Mp3,
-				SpeakingRate = 0.90,
-				VolumeGainDb = 6
+				AudioEncoding = GoogleConfig.AudioEncoding,
+				SpeakingRate = GoogleConfig.SpeakingRate,
+				VolumeGainDb = GoogleConfig.volumeGainDb
 			};
 
 			var response = await Client.SynthesizeSpeechAsync(new SynthesizeSpeechRequest
@@ -60,7 +64,7 @@ namespace NextStopAnnouncementGenerator.Google
 		protected override async Task Synth(SsmlStopName item)
 		{
 			var sanitizedName = SanitizeName(item.StopName);
-			var fileName = BuildFileName(sanitizedName);
+			var fileName = BuildFileName(sanitizedName, GoogleConfig.FileExtension);
 			var ssml = string.IsNullOrWhiteSpace(item.SsmlOverride) ? sanitizedName : item.SsmlOverride;
 			await Synth(fileName, ssml);
 		}
@@ -76,8 +80,8 @@ namespace NextStopAnnouncementGenerator.Google
 			return sanitized;
 		}
 
-		private static string BuildFileName(string sanitizedName) =>
-			$"{sanitizedName.Replace(" ", "_").ToLower()}.mp3";
+		private static string BuildFileName(string sanitizedName, string fileExtension) =>
+			$"{sanitizedName.Replace(" ", "_").ToLower()}.{fileExtension}";
 
 		#endregion Helpers
 	}
