@@ -59,8 +59,8 @@ steps:
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
     Contents: |
-      '**/Config/**/*.json'
-      '**/*.md'
+      '**\*.json'
+      'README.md'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: GitHubRelease@0
@@ -72,4 +72,4 @@ steps:
     compareWith: 'lastRelease'
     tagSource: 'manual'
     tag: '$(Build.BuildNumber)'
-    assets: '**/*.*'
+    assets: '**\*.*'
