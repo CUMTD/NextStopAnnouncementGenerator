@@ -51,8 +51,10 @@ steps:
   displayName: 'Copy Build Output'
   inputs:
     SourceFolder: '$(System.DefaultWorkingDirectory)'
-    Contents: '**\*.exe'
-    TargetFolder: '**\Config\*.json'
+    Contents: |
+      '**\*.exe'
+      '**\Config\*.json'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: GitHubRelease@0
   displayName: 'Create Github Release'
