@@ -1,8 +1,6 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.TextToSpeech.V1;
@@ -35,7 +33,7 @@ namespace NextStopAnnouncementGenerator.Google
 			var voice = new VoiceSelectionParams
 			{
 				LanguageCode = "en-US",
-				SsmlGender = SsmlVoiceGender.Female
+				SsmlGender = SsmlVoiceGender.Male
 			};
 
 			var config = new AudioConfig
@@ -53,7 +51,7 @@ namespace NextStopAnnouncementGenerator.Google
 			})
 			.ConfigureAwait(false);
 
-			using var output = File.Create(Path.Combine(BasePath, fileName));
+			await using var output = File.Create(Path.Combine(BasePath, fileName));
 			response.AudioContent.WriteTo(output);
 
 		}
@@ -61,9 +59,9 @@ namespace NextStopAnnouncementGenerator.Google
 		#region Synthesizer<SsmlStopName>
 		protected override async Task Synth(SsmlStopName item)
 		{
-			var sanatizedName = SanitizeName(item.StopName);
-			var fileName = BuildFileName(sanatizedName);
-			var ssml = string.IsNullOrWhiteSpace(item.SsmlOverride) ? sanatizedName : item.SsmlOverride;
+			var sanitizedName = SanitizeName(item.StopName);
+			var fileName = BuildFileName(sanitizedName);
+			var ssml = string.IsNullOrWhiteSpace(item.SsmlOverride) ? sanitizedName : item.SsmlOverride;
 			await Synth(fileName, ssml);
 		}
 

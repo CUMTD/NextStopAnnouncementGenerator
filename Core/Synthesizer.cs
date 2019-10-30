@@ -12,7 +12,7 @@ using CsvHelper.Configuration;
 namespace NextStopAnnouncementGenerator.Core
 {
 	/// <summary>
-	/// Synthasizes a CSV containing a collection of T
+	/// Synthesizes a CSV containing a collection of T
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public abstract class Synthesizer<T>
@@ -31,11 +31,11 @@ namespace NextStopAnnouncementGenerator.Core
 		/// Action to run for logging.
 		/// </summary>
 		protected Action<string> LogAction { get; }
-		// Delay between synthasis. Useful if synthasis tool is rate limited.
+		// Delay between synthesis. Useful if synthesis tool is rate limited.
 		private int Delay { get; }
 
 		/// <summary>
-		/// CsvHelper configuration. Contains sensable defaults but is overridable.
+		/// CsvHelper configuration. Contains sensible defaults but is overridable.
 		/// </summary>
 		protected virtual Configuration Configuration => new Configuration(CultureInfo.CurrentCulture)
 		{
@@ -58,7 +58,7 @@ namespace NextStopAnnouncementGenerator.Core
 		/// <param name="basePath">The base path for input and output.</param>
 		/// <param name="inputFileName">The name of the CSV input file to read.</param>
 		/// <param name="logAction">Action to run for logging.</param>
-		/// <param name="delay">Delay between synthasis. Useful if synthasis tool is rate limited.</param>
+		/// <param name="delay">Delay between synthesis. Useful if synthesis tool is rate limited.</param>
 		protected Synthesizer(string basePath, string inputFileName, Action<string> logAction = null, int delay = 0)
 		{
 			BasePath = basePath ?? throw new ArgumentException(nameof(basePath));
@@ -68,7 +68,7 @@ namespace NextStopAnnouncementGenerator.Core
 		}
 
 		/// <summary>
-		/// Run the synthasizer.
+		/// Run the synthesizer.
 		/// </summary>
 		/// <returns>A task representing the running status.</returns>
 		public async Task Run()
@@ -96,10 +96,10 @@ namespace NextStopAnnouncementGenerator.Core
 		}
 
 		/// <summary>
-		/// Synthasize a T.
+		/// Synthesize a T.
 		/// </summary>
-		/// <param name="item">The item to synthasize.</param>
-		/// <returns>A task representing the synthasis status.</returns>
+		/// <param name="item">The item to synthesize.</param>
+		/// <returns>A task representing the synthesis status.</returns>
 		protected abstract Task Synth(T item);
 	}
 
