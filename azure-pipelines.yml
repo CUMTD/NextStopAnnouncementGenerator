@@ -13,7 +13,7 @@ variables:
   buildConfiguration: 'Release'
   major: '1'
   minor: '0'
-  patch: $[counter('versioncounter', 0)]
+  patch: '0'
 
 steps:
 - task: NuGetToolInstaller@0
@@ -54,3 +54,9 @@ steps:
     title: 'Next Stop Announcement Generator'
     addChangeLog: true
     compareWith: 'lastRelease'
+    tagSource: 'manual'
+    tag: $(major).$(minor).$(patch)-$(Build.BuildNumber)
+    assets: |
+      $(Build.ArtifactStagingDirectory)/*.exe
+      $(Build.ArtifactStagingDirectory)/README.md
+      $(Build.ArtifactStagingDirectory)/Config/*.json
