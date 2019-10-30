@@ -10,10 +10,14 @@ namespace NextStopAnnouncementGenerator.App
 	{
 		internal static async Task Main()
 		{
-			var googleTextToSpeechClient = new GoogleTextToSpeechClient(Path.Combine(GetFolderPath(SpecialFolder.Desktop), "next_stop_announcements"));
-			await googleTextToSpeechClient.Run(Console.WriteLine);
+			var googleTextToSpeechClient = new GoogleTextToSpeechSynthesizer(
+				Path.Combine(GetFolderPath(SpecialFolder.Desktop), "next_stop_announcements"),
+				"next_stop.csv",
+				Console.WriteLine
+			);
+			await googleTextToSpeechClient.Run();
 
-			Console.WriteLine("Done!");
+			Console.WriteLine("\nDone!");
 			Console.ReadLine();
 		}
 
