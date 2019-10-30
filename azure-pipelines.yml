@@ -55,7 +55,7 @@ steps:
     addChangeLog: true
     compareWith: 'lastRelease'
     tagSource: 'manual'
-    tag: $(major).$(minor).$(patch)-$(Build.BuildNumber)
+    tag: $(major).$(minor).$(patch)-$(Rev:.r)
     assets: |
       $(Build.ArtifactStagingDirectory)/*.exe
       $(Build.ArtifactStagingDirectory)/README.md
