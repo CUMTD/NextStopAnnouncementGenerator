@@ -72,4 +72,7 @@ steps:
     compareWith: 'lastRelease'
     tagSource: 'manual'
     tag: '$(Build.BuildNumber)'
-    assets: '**\*.*'
+    assets: |
+      '**\*.json'
+      '**\*.md'
+      '**\*.exe'
