@@ -6,13 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OctoPack" Version="3.6.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Core\NextStopAnnouncementGenerator.Core.csproj" />
     <ProjectReference Include="..\Google\NextStopAnnouncementGenerator.Google.csproj" />
   </ItemGroup>

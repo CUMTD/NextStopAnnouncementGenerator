@@ -47,17 +47,10 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
 
-- task: CopyFiles@2
-  displayName: 'Copy Build Output'
+- task: GitHubRelease@0
+  displayName: 'Create Github Release'
   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)'
-    Contents: '**\octopacked\**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-- task: NuGetCommand@2
-  displayName: 'Push to Octopus'
-  inputs:
-    command: push
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg;!$(Build.ArtifactStagingDirectory)/**/tempNuGet*.nupkg'
-    nuGetFeedType: external
-    publishFeedCredentials: 'Octopus Nuget Feed'
+    gitHubConnection: 'CUMTD'
+    title: 'Next Stop Announcement Generator'
+    addChangeLog: true
+    compareWith: 'lastRelease'
