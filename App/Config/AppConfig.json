@@ -1,5 +1,6 @@
 {
 	"useDesktop": false,
 	"inputFileName": "C:\\NextStopAnnouncements\\next_stops.csv",
-	"outputDirectory": "C:\\NextStopAnnouncements\\Output\\"
+	"outputDirectory": "C:\\NextStopAnnouncements\\Output\\",
+	"prepend": "Now approaching ,"
 }

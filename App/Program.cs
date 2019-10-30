@@ -11,19 +11,18 @@ namespace NextStopAnnouncementGenerator.App
 	{
 		internal static async Task Main()
 		{
-			var (inputFile, outDirectory) = GetInputOutputPaths();
+			var config = ConfigReader.ReadSettings<AppConfig>();
+			var (inputFile, outDirectory) = GetInputOutputPaths(config);
 
-			var googleTextToSpeechClient = new GoogleTextToSpeechSynthesizer(inputFile, outDirectory, Console.WriteLine);
+			var googleTextToSpeechClient = new GoogleTextToSpeechSynthesizer(inputFile, outDirectory, config.Prepend, Console.WriteLine);
 			await googleTextToSpeechClient.Run();
 
 			Console.WriteLine("\nDone!");
 			Console.ReadLine();
 		}
 
-		private static (string, string) GetInputOutputPaths()
+		private static (string, string) GetInputOutputPaths(AppConfig config)
 		{
-			var config = ConfigReader.ReadSettings<AppConfig>();
-
 			if (config.UseDesktop)
 			{
 				var basePath = Environment.GetFolderPath(SpecialFolder.Desktop);

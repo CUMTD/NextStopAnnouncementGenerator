@@ -15,7 +15,7 @@ namespace NextStopAnnouncementGenerator.Google
 	{
 		private TextToSpeechClient Client { get; }
 
-		public GoogleTextToSpeechSynthesizer(string inputFile, string outDirectory, Action<string> logAction) : base(inputFile, outDirectory, logAction, 1000)
+		public GoogleTextToSpeechSynthesizer(string inputFile, string outDirectory, string prepend, Action<string> logAction) : base(inputFile, outDirectory, prepend, logAction, 1000)
 		{
 			var cred = GoogleCredential.FromFile(Path.Combine(AppContext.BaseDirectory, "googleCreds.json")).ToChannelCredentials();
 			var channel = new Channel(TextToSpeechClient.DefaultEndpoint.Host, TextToSpeechClient.DefaultEndpoint.Port, cred);
@@ -27,7 +27,7 @@ namespace NextStopAnnouncementGenerator.Google
 
 			var input = new SynthesisInput
 			{
-				Ssml = $"<speak>Now approaching, {ssml}</speak>"
+				Ssml = $"<speak>{Prepend}{ssml}</speak>"
 			};
 
 			var voice = new VoiceSelectionParams

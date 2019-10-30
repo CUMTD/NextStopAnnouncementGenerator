@@ -28,6 +28,11 @@ namespace NextStopAnnouncementGenerator.Core
 		protected string InputFile { get; }
 
 		/// <summary>
+		/// The text to prepend to the each announcement.
+		/// </summary>
+		protected string Prepend { get; }
+
+		/// <summary>
 		/// Action to run for logging.
 		/// </summary>
 		protected Action<string> LogAction { get; }
@@ -58,12 +63,14 @@ namespace NextStopAnnouncementGenerator.Core
 		/// </summary>
 		/// <param name="inputFile">The path to the input csv file.</param>
 		/// <param name="outDirectory">The output directory for generated audio files.</param>
+		/// <param name="prepend">The text to prepend to each announcement.</param>
 		/// <param name="logAction">Action to run for logging.</param>
 		/// <param name="delay">Delay between synthesis. Useful if synthesis tool is rate limited.</param>
-		protected Synthesizer(string inputFile, string outDirectory, Action<string> logAction = null, int delay = 0)
+		protected Synthesizer(string inputFile, string outDirectory, string prepend, Action<string> logAction = null, int delay = 0)
 		{
 			InputFile = inputFile ?? throw new ArgumentException(nameof(inputFile));
 			OutputDirectory = outDirectory ?? throw new ArgumentException(nameof(outDirectory));
+			Prepend = prepend ?? string.Empty;
 			LogAction = logAction ?? (_str => { });
 			Delay = delay;
 		}
