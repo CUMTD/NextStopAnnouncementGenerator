@@ -2,6 +2,8 @@
 
 Generates next stop announcements from a CSV using [Google's Cloud Text-to-Speech](https://cloud.google.com/text-to-speech/) of stop names and [SSML pronounceation](https://cloud.google.com/text-to-speech/docs/ssml) data. The program could be easily extened to use other text-to-speach providers.
 
+[![Build Status](https://dev.azure.com/cumtd/MTD/_apis/build/status/CUMTD.NextStopAnnouncementGenerator?branchName=master)](https://dev.azure.com/cumtd/MTD/_build/latest?definitionId=17&branchName=master)
+
 ## CSV Format
 
 CSV should be in the format: `stop_name,ssml_data`. It should not containa header row.
