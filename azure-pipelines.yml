@@ -51,7 +51,10 @@ steps:
   displayName: 'Copy Build Output'
   inputs:
     SourceFolder: '$(System.DefaultWorkingDirectory)'
-    Contents: '**\*.exe'
+    Contents: |
+      '**\*.exe'
+      '**\Config\*.json'
+      '**\*.md'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: CopyFiles@2
@@ -72,7 +75,4 @@ steps:
     compareWith: 'lastRelease'
     tagSource: 'manual'
     tag: '$(Build.BuildNumber)'
-    assets: |
-      '**\*.json'
-      '**\*.md'
-      '**\*.exe'
+    assets: '$(Build.ArtifactStagingDirectory)/*'
