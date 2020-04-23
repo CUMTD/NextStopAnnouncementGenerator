@@ -20,7 +20,7 @@ namespace NextStopAnnouncementGenerator.Google.Config
 				}
 				if ("female".Equals(Gender, StringComparison.CurrentCultureIgnoreCase))
 				{
-					return SsmlVoiceGender.Male;
+					return SsmlVoiceGender.Female;
 				}
 				return "neutral".Equals(Gender, StringComparison.CurrentCultureIgnoreCase) ?
 					SsmlVoiceGender.Male :
