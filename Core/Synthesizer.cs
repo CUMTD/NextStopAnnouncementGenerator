@@ -84,7 +84,14 @@ namespace NextStopAnnouncementGenerator.Core
 			var items = ReadCsv();
 			foreach (var item in items)
 			{
-				await Synth(item);
+				try
+				{
+					await Synth(item);
+				}
+				catch (Exception ex)
+				{
+					LogAction($"Failed to synth: {ex.Message}");
+				}
 				LogAction(item.ToString());
 				// Allow the thread to sleep in case there is a request limit.
 				Thread.Sleep(Delay);
