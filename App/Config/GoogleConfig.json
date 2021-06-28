@@ -1,7 +1,7 @@
 {
 	"languageCode": "en-US",
-	"gender": "Male", // Male, Female, Neutral, Unspecified
-	"encoding": "Mp3", // Linear16, Mp3, OggOpus, Unspecified
-	"speakingRate": 0.9, // 1 == 100%
+	"gender": "Male",
+	"encoding": "Mp3",
+	"speakingRate": 0.9,
 	"volumeGainDb": 6
 }

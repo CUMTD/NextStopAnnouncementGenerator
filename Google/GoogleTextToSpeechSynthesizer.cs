@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.TextToSpeech.V1;
 using Grpc.Auth;
-using Grpc.Core;
 using NextStopAnnouncementGenerator.Core;
 using NextStopAnnouncementGenerator.Core.Config;
 using NextStopAnnouncementGenerator.Google.Config;
@@ -21,8 +20,7 @@ namespace NextStopAnnouncementGenerator.Google
 		public GoogleTextToSpeechSynthesizer(string inputFile, string outDirectory, string prepend, Action<string> logAction) : base(inputFile, outDirectory, prepend, logAction, 1000)
 		{
 			var cred = GoogleCredential.FromFile(Path.Combine(AppContext.BaseDirectory, "googleCreds.json")).ToChannelCredentials();
-			var channel = new Channel(TextToSpeechClient.DefaultEndpoint.Host, TextToSpeechClient.DefaultEndpoint.Port, cred);
-			Client = TextToSpeechClient.Create(channel);
+			Client = new TextToSpeechClientBuilder { ChannelCredentials = cred }.Build();
 			GoogleConfig = ConfigReader.ReadSettings<GoogleConfig>();
 		}
 
@@ -44,7 +42,7 @@ namespace NextStopAnnouncementGenerator.Google
 			{
 				AudioEncoding = GoogleConfig.AudioEncoding,
 				SpeakingRate = GoogleConfig.SpeakingRate,
-				VolumeGainDb = GoogleConfig.volumeGainDb
+				VolumeGainDb = GoogleConfig.VolumeGainDb
 			};
 
 			var response = await Client.SynthesizeSpeechAsync(new SynthesizeSpeechRequest
