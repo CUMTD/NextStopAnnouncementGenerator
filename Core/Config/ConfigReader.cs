@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace NextStopAnnouncementGenerator.Core.Config
 {
@@ -40,7 +40,10 @@ namespace NextStopAnnouncementGenerator.Core.Config
 			if (file.Exists)
 			{
 				var contents = File.ReadAllText(file.FullName);
-				return JsonConvert.DeserializeObject<T>(contents);
+				return JsonSerializer.Deserialize<T>(contents, new JsonSerializerOptions
+				{
+					PropertyNameCaseInsensitive = true
+				});
 			}
 
 			throw new FileNotFoundException("Can't find config file {0}", file.FullName);

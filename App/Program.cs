@@ -1,9 +1,9 @@
 using System;
 using System.IO;
-using static System.Environment;
-using NextStopAnnouncementGenerator.Google;
 using System.Threading.Tasks;
 using NextStopAnnouncementGenerator.Core.Config;
+using NextStopAnnouncementGenerator.Google;
+using static System.Environment;
 
 namespace NextStopAnnouncementGenerator.App
 {
@@ -18,7 +18,6 @@ namespace NextStopAnnouncementGenerator.App
 			await googleTextToSpeechClient.Run();
 
 			Console.WriteLine("\nDone!");
-			Console.ReadLine();
 		}
 
 		private static (string, string) GetInputOutputPaths(AppConfig config)

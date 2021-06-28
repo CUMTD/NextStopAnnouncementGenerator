@@ -9,7 +9,7 @@ namespace NextStopAnnouncementGenerator.Google.Config
 		public string Gender { get; set; }
 		public string Encoding { get; set; }
 		public double SpeakingRate { get; set; }
-		public int volumeGainDb { get; set; }
+		public int VolumeGainDb { get; set; }
 		public SsmlVoiceGender SsmlVoiceGender
 		{
 			get
@@ -18,13 +18,14 @@ namespace NextStopAnnouncementGenerator.Google.Config
 				{
 					return SsmlVoiceGender.Male;
 				}
-				if ("female".Equals(Gender, StringComparison.CurrentCultureIgnoreCase))
+				else if ("female".Equals(Gender, StringComparison.CurrentCultureIgnoreCase) || "neutral".Equals(Gender, StringComparison.CurrentCultureIgnoreCase))
 				{
 					return SsmlVoiceGender.Female;
 				}
-				return "neutral".Equals(Gender, StringComparison.CurrentCultureIgnoreCase) ?
-					SsmlVoiceGender.Male :
-					SsmlVoiceGender.Unspecified;
+				else
+				{
+					return SsmlVoiceGender.Unspecified;
+				}
 			}
 		}
 
@@ -36,13 +37,18 @@ namespace NextStopAnnouncementGenerator.Google.Config
 				{
 					return AudioEncoding.Mp3;
 				}
-				if ("Linear16".Equals(Encoding, StringComparison.CurrentCultureIgnoreCase))
+				else if ("Linear16".Equals(Encoding, StringComparison.CurrentCultureIgnoreCase))
 				{
 					return AudioEncoding.Linear16;
 				}
-				return "OggOpus".Equals(Encoding, StringComparison.CurrentCultureIgnoreCase) ?
-					AudioEncoding.OggOpus :
-					AudioEncoding.Unspecified;
+				else if ("OggOpus".Equals(Encoding, StringComparison.CurrentCultureIgnoreCase))
+				{
+					return AudioEncoding.OggOpus;
+				}
+				else
+				{
+					return AudioEncoding.Unspecified;
+				}
 			}
 		}
 
@@ -54,13 +60,18 @@ namespace NextStopAnnouncementGenerator.Google.Config
 				{
 					return "mp3";
 				}
-				if ("Linear16".Equals(Encoding, StringComparison.CurrentCultureIgnoreCase))
+				else if ("Linear16".Equals(Encoding, StringComparison.CurrentCultureIgnoreCase))
 				{
 					return "wav";
 				}
-				return "OggOpus".Equals(Encoding, StringComparison.CurrentCultureIgnoreCase) ?
-					"ogg" :
-					"wav";
+				else if ("OggOpus".Equals(Encoding, StringComparison.CurrentCultureIgnoreCase))
+				{
+					return "ogg";
+				}
+				else
+				{
+					return "wav";
+				}
 			}
 		}
 	}

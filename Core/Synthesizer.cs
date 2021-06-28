@@ -2,8 +2,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
@@ -43,15 +41,14 @@ namespace NextStopAnnouncementGenerator.Core
 		/// <summary>
 		/// CsvHelper configuration. Contains sensible defaults but is overridable.
 		/// </summary>
-		protected virtual Configuration CsvReaderConfiguration => new Configuration(CultureInfo.CurrentCulture)
+		protected virtual CsvConfiguration CsvReaderConfiguration => new(CultureInfo.CurrentCulture)
 		{
 			BadDataFound = rc => LogAction($"BAD DATA: {rc.RawRecord}"),
 			HasHeaderRecord = false,
 			IgnoreBlankLines = true,
-			IgnoreQuotes = true,
 			ReadingExceptionOccurred = re =>
 			{
-				LogAction($"READING EXCEPTION: {re.Message}");
+				LogAction($"READING EXCEPTION: {re.Exception.Message}");
 				return false;
 			},
 			SanitizeForInjection = true,
@@ -68,8 +65,8 @@ namespace NextStopAnnouncementGenerator.Core
 		/// <param name="delay">Delay between synthesis. Useful if synthesis tool is rate limited.</param>
 		protected Synthesizer(string inputFile, string outDirectory, string prepend, Action<string> logAction = null, int delay = 0)
 		{
-			InputFile = inputFile ?? throw new ArgumentException(nameof(inputFile));
-			OutputDirectory = outDirectory ?? throw new ArgumentException(nameof(outDirectory));
+			InputFile = inputFile ?? throw new ArgumentNullException(nameof(inputFile));
+			OutputDirectory = outDirectory ?? throw new ArgumentNullException(nameof(outDirectory));
 			Prepend = prepend ?? string.Empty;
 			LogAction = logAction ?? (_str => { });
 			Delay = delay;
