@@ -1,0 +1,9 @@
+<Project>
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageVersion Include="Google.Cloud.TextToSpeech.V1" Version="3.2.0" />
+		<PackageVersion Include="CsvHelper" Version="30.0.1" />
+	</ItemGroup>
+</Project>
