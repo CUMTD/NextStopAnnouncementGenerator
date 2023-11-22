@@ -51,7 +51,6 @@ namespace NextStopAnnouncementGenerator.Core
 				LogAction($"READING EXCEPTION: {re.Exception.Message}");
 				return false;
 			},
-			SanitizeForInjection = true,
 			TrimOptions = TrimOptions.Trim
 		};
 

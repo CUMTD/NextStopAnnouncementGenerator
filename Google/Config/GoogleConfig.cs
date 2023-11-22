@@ -1,33 +1,43 @@
 using System;
+using System.Xml.Linq;
 using Google.Cloud.TextToSpeech.V1;
 
 namespace NextStopAnnouncementGenerator.Google.Config
 {
 	public class GoogleConfig
 	{
-		public string LanguageCode { get; set; }
-		public string Gender { get; set; }
 		public string Encoding { get; set; }
 		public double SpeakingRate { get; set; }
 		public int VolumeGainDb { get; set; }
-		public SsmlVoiceGender SsmlVoiceGender
+		public LanguageOption LanguageOption { get; set; }
+
+		public VoiceSelectionParams VoiceSelectionParams => LanguageOption switch
 		{
-			get
+			LanguageOption.UsMale => new VoiceSelectionParams
 			{
-				if ("male".Equals(Gender, StringComparison.CurrentCultureIgnoreCase))
-				{
-					return SsmlVoiceGender.Male;
-				}
-				else if ("female".Equals(Gender, StringComparison.CurrentCultureIgnoreCase) || "neutral".Equals(Gender, StringComparison.CurrentCultureIgnoreCase))
-				{
-					return SsmlVoiceGender.Female;
-				}
-				else
-				{
-					return SsmlVoiceGender.Unspecified;
-				}
-			}
-		}
+				LanguageCode = "en-US",
+				SsmlGender = SsmlVoiceGender.Male,
+				Name = "en-US-Neural2-D"
+			},
+			LanguageOption.UkFemale => new VoiceSelectionParams
+			{
+				LanguageCode = "en-GB",
+				SsmlGender = SsmlVoiceGender.Female,
+				Name = "en-GB-Standard-A"
+			},
+			LanguageOption.UkMale => new VoiceSelectionParams
+			{
+				LanguageCode = "en-GB",
+				SsmlGender = SsmlVoiceGender.Male,
+				Name = "en-GB-Standard-B"
+			},
+			_ => new VoiceSelectionParams
+			{
+				LanguageCode = "en-US",
+				SsmlGender = SsmlVoiceGender.Female,
+				Name = "en-US-Neural2-F"
+			},
+		};
 
 		public AudioEncoding AudioEncoding
 		{

@@ -1,7 +1,6 @@
 {
-	"languageCode": "en-US",
-	"gender": "Male",
 	"encoding": "Mp3",
 	"speakingRate": 0.9,
-	"volumeGainDb": 6
+	"volumeGainDb": 6,
+	"languageOption":  0
 }

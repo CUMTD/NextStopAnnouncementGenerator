@@ -2,18 +2,21 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Google.Apis.Auth.OAuth2;
-using Google.Cloud.TextToSpeech.V1;
-using Grpc.Auth;
 using NextStopAnnouncementGenerator.Core;
 using NextStopAnnouncementGenerator.Core.Config;
 using NextStopAnnouncementGenerator.Google.Config;
+using Google.Cloud.TextToSpeech.V1;
+using Google.Apis.Auth.OAuth2;
+using Grpc.Auth;
 
 namespace NextStopAnnouncementGenerator.Google
 {
 
-	public class GoogleTextToSpeechSynthesizer : Synthesizer<SsmlStopName>
+	public partial class GoogleTextToSpeechSynthesizer : Synthesizer<SsmlStopName>
 	{
+		[GeneratedRegex(@"[^0-9a-zA-Z\s]+")]
+		private static partial Regex NameReplaceRegex();
+
 		private TextToSpeechClient Client { get; }
 		private GoogleConfig GoogleConfig { get; }
 
@@ -26,23 +29,18 @@ namespace NextStopAnnouncementGenerator.Google
 
 		private async Task Synth(string fileName, string ssml)
 		{
-
 			var input = new SynthesisInput
 			{
 				Ssml = $"<speak>{Prepend}{ssml}</speak>"
 			};
 
-			var voice = new VoiceSelectionParams
-			{
-				LanguageCode = GoogleConfig.LanguageCode,
-				SsmlGender = GoogleConfig.SsmlVoiceGender
-			};
+			var voice = GoogleConfig.VoiceSelectionParams;
 
 			var config = new AudioConfig
 			{
 				AudioEncoding = GoogleConfig.AudioEncoding,
 				SpeakingRate = GoogleConfig.SpeakingRate,
-				VolumeGainDb = GoogleConfig.VolumeGainDb
+				VolumeGainDb = GoogleConfig.VolumeGainDb,
 			};
 
 			var response = await Client.SynthesizeSpeechAsync(new SynthesizeSpeechRequest
@@ -74,12 +72,13 @@ namespace NextStopAnnouncementGenerator.Google
 		private static string SanitizeName(string name)
 		{
 			var replaced = name.Replace("&", "and");
-			var sanitized = Regex.Replace(replaced, @"[^0-9a-zA-Z\s]+", "");
+			var sanitized = NameReplaceRegex().Replace(replaced, "");
 			return sanitized;
 		}
 
 		private static string BuildFileName(string sanitizedName, string fileExtension) =>
 			$"{sanitizedName.Replace(" ", "_").ToLower()}.{fileExtension}";
+		
 
 		#endregion Helpers
 	}
